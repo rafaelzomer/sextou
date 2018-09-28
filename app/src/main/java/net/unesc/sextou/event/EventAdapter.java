@@ -10,7 +10,7 @@ import java.util.List;
 
 public class EventAdapter extends GenericAdapter<Event> {
     public EventAdapter(List<Event> dataset) {
-        super(dataset, new ViewHolder(), R.layout.event_card_adapter);
+        super(dataset, new ViewHolder(), R.layout.event_adapter);
     }
 
     static class ViewHolder implements Holder<Event> {
