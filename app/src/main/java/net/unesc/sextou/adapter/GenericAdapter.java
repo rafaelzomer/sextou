@@ -10,19 +10,19 @@ import java.util.List;
 
 public class GenericAdapter<T> extends RecyclerView.Adapter<GenericAdapter.ViewHolder<T>> {
     final private List<T> dataset;
-    final private Holder<T> holder;
     final private int view;
+    final private Configure<T> configure;
 
-    public GenericAdapter(List<T> dataset, Holder<T> holder, int view) {
+    public GenericAdapter(List<T> dataset, int view, Configure<T> configure) {
         this.dataset = dataset;
-        this.holder = holder;
         this.view = view;
+        this.configure = configure;
     }
 
     @NonNull
     @Override
     public ViewHolder<T> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder<>(holder, LayoutInflater.from(parent.getContext())
+        return new ViewHolder<>(configure.config(), LayoutInflater.from(parent.getContext())
                 .inflate(view, parent, false));
     }
 
@@ -40,6 +40,10 @@ public class GenericAdapter<T> extends RecyclerView.Adapter<GenericAdapter.ViewH
         void configure(View view);
 
         void set(T news);
+    }
+
+    public interface Configure<J> {
+        Holder<J> config();
     }
 
     static class ViewHolder<T> extends RecyclerView.ViewHolder {

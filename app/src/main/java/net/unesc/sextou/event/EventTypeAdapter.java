@@ -10,20 +10,18 @@ import java.util.List;
 
 public class EventTypeAdapter extends GenericAdapter<EventType> {
     public EventTypeAdapter(List<EventType> dataset) {
-        super(dataset, new ViewHolder(), R.layout.event_type_adapter);
-    }
+        super(dataset, R.layout.event_type_adapter, () -> new Holder<EventType>() {
+            private TextView mTitle;
 
-    static class ViewHolder implements Holder<EventType> {
-        private TextView mTitle;
+            @Override
+            public void configure(View view) {
+                mTitle = view.findViewById(R.id.title);
+            }
 
-        @Override
-        public void configure(View view) {
-            mTitle = view.findViewById(R.id.title);
-        }
-
-        @Override
-        public void set(EventType eventType) {
-            mTitle.setText(eventType.getTitle());
-        }
+            @Override
+            public void set(EventType event) {
+                mTitle.setText(event.getTitle());
+            }
+        });
     }
 }
