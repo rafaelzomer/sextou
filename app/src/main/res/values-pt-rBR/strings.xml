@@ -3,4 +3,10 @@
     <string name="app_name">Sextou</string>
     <string name="loading_text">Carregando...</string>
     <string name="prompt_password">Senha</string>
+    <string name="title_activity_login">Acessar</string>
+    <string name="prompt_email" translatable="false">E-mail</string>
+    <string name="action_settings">Configurações</string>
+    <string name="action_register">Registrar</string>
+    <string name="action_sign_in">Acessar</string>
+    <string name="action_sign_in_short">Acessar</string>
 </resources>
