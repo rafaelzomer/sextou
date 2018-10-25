@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,7 +15,10 @@ import android.widget.TextView;
 
 import net.unesc.sextou.AppActivity;
 import net.unesc.sextou.R;
+import net.unesc.sextou.database.SqlDatabase;
 import net.unesc.sextou.register.RegisterActivity;
+
+import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -24,38 +28,34 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UserDao userDao = new UserDao(LoginActivity.this);
+        userDao.insert(new User("rafael", "zomer"));
         setContentView(R.layout.login_activity);
         mEmailView = findViewById(R.id.email);
 
+        List<User> users = userDao.select();
+        Log.d("zomer=", "="+users);
+
         mPasswordView = findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
+        mPasswordView.setOnEditorActionListener((textView, id, keyEvent) -> {
+            if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
+                attemptLogin();
+                return true;
             }
+            return false;
         });
 
         Button mEmailSignInButton = findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        mEmailSignInButton.setOnClickListener(view -> {
 //                attemptLogin();
-                Intent intent = new Intent(LoginActivity.this, AppActivity.class);
-                startActivity(intent);
-            }
+            Intent intent = new Intent(LoginActivity.this, AppActivity.class);
+            startActivity(intent);
         });
 
         Button mRegisterButton = findViewById(R.id.register_button);
-        mRegisterButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
-            }
+        mRegisterButton.setOnClickListener(view -> {
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivity(intent);
         });
     }
 
