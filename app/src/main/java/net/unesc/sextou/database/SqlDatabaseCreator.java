@@ -39,9 +39,19 @@ public class SqlDatabaseCreator {
         return fields;
     }
 
+    private static void backupData(SQLiteDatabase db, Class table) {
+        //TODO
+    }
+
+    private static void restoreData(SQLiteDatabase db, Class table) {
+        //TODO
+    }
+
     public static void execute(SQLiteDatabase db) {
         for (Class<? extends SqlTable> table : TABLES) {
             String tableName = table.getSimpleName();
+            backupData(db, table);
+            db.execSQL("drop table if exists "+tableName);
             List<String> columns = new ArrayList<>();
             for (Field field : getFields(table)) {
                 String columnName = field.getName();
@@ -59,6 +69,7 @@ public class SqlDatabaseCreator {
             String allColumns = TextUtils.join(",", columns);
             String tableSql = "create table " + tableName + " (" + allColumns + ")";
             db.execSQL(tableSql);
+            restoreData(db, table);
         }
     }
 }
