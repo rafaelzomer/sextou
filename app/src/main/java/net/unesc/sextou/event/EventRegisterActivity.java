@@ -20,6 +20,7 @@ public class EventRegisterActivity extends DefaultActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_register_activity);
+        getSupportActionBar().setTitle("Novo Evento");
         recyclerView = findViewById(R.id.events_type);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(EventRegisterActivity.this, 2));

@@ -1,6 +1,8 @@
 package net.unesc.sextou.event;
 
+import android.support.v7.widget.CardView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,16 +16,21 @@ public class EventTypeAdapter extends GenericAdapter<EventType> {
         super(dataset, R.layout.event_type_adapter, () -> new Holder<EventType>() {
             private TextView mTitle;
             private ImageView mIcon;
+            private CardView mCard;
 
             @Override
             public void configure(View view) {
                 mTitle = view.findViewById(R.id.title);
                 mIcon = view.findViewById(R.id.icon);
+                mCard = view.findViewById(R.id.card);
+
+                mCard.setOnClickListener(viewCard -> {
+                    
+                });
             }
 
             @Override
             public void set(EventType event) {
-
                 mTitle.setText(event.getTitle());
                 mIcon.setImageResource(event.getIcon());
             }
