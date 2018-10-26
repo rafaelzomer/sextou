@@ -15,7 +15,7 @@
         android:contentDescription="@string/nav_header_desc"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:scaleType="centerCrop"
-        app:srcCompat="@drawable/logo_wallpaper" />
+        app:srcCompat="@drawable/bg_sidebar" />
 
     <TextView
         android:layout_width="match_parent"
