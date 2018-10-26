@@ -6,8 +6,11 @@ import java.io.Serializable;
 public class EventType implements Serializable {
     private String title;
 
-    public EventType(String title) {
+    private int icon;
+
+    public EventType(String title, int icon) {
         this.title = title;
+        this.icon = icon;
     }
 
     public String getTitle() {
@@ -16,5 +19,13 @@ public class EventType implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getIcon() {
+        return icon;
+    }
+
+    public void setIcon(int icon) {
+        this.icon = icon;
     }
 }
