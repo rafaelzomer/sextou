@@ -4,11 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import net.unesc.sextou.AppActivity;
 import net.unesc.sextou.R;
@@ -16,7 +15,6 @@ import net.unesc.sextou.database.SqlCompare;
 import net.unesc.sextou.register.RegisterActivity;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -29,10 +27,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
         mEmailView = findViewById(R.id.email);
-
-        List<User> users = userDao.select();
-        Log.d("zomer=", "=" + users);
-
         mPasswordView = findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener((textView, id, keyEvent) -> {
             if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
@@ -61,23 +55,21 @@ public class LoginActivity extends AppCompatActivity {
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
-        boolean cancel = false;
-        View focusView = null;
-
         if (!TextUtils.isEmpty(password) && !User.isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
+            mPasswordView.requestFocus();
+            return;
         }
 
         if (TextUtils.isEmpty(email)) {
             mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!User.isEmailValid(email)) {
+            mEmailView.requestFocus();
+            return;
+        }
+        if (!User.isEmailValid(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
+            mEmailView.requestFocus();
+            return;
         }
         User user = userDao.selectOne(
                 Arrays.asList(
@@ -86,9 +78,11 @@ public class LoginActivity extends AppCompatActivity {
                 )
         );
 
-        if (cancel || user == null) {
-            focusView.requestFocus();
+        Toast.makeText(getApplicationContext(), R.string.signin_progress, Toast.LENGTH_SHORT).show();
+        if (user == null) {
+            Toast.makeText(getApplicationContext(), R.string.error_incorrect_login, Toast.LENGTH_SHORT).show();
         } else {
+            Toast.makeText(getApplicationContext(), R.string.success, Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(LoginActivity.this, AppActivity.class);
             startActivity(intent);
         }

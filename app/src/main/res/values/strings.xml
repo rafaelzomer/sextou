@@ -21,7 +21,9 @@
         completions."
     </string>
     <string name="loading_text">Loading...</string>
-    <string name="large_text">Large</string>
+    <string name="signin_progress">Login...</string>
+    <string name="error_incorrect_login">Your login is incorrect, try again</string>
+    <string name="success">Success!</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

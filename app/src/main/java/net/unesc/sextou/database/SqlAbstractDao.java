@@ -89,7 +89,8 @@ public abstract class SqlAbstractDao<T extends SqlTable> {
     }
 
     public T selectOne(List<SqlCompare> where) {
-        return select(where, 1).get(0);
+        List<T> list = select(where, 1);
+        return list.isEmpty() ? null : list.get(0);
     }
 
     public T selectOne() {
@@ -104,12 +105,12 @@ public abstract class SqlAbstractDao<T extends SqlTable> {
             List<String> expressions = new ArrayList<>();
             List<String> columns = new ArrayList<>();
             for (SqlCompare sqlCompare : where) {
-                expressions.add(sqlCompare.getName() + " = " + sqlCompare.getValue());
+                expressions.add(sqlCompare.getName() + " "+ sqlCompare.getOperator() +" \"" + sqlCompare.getValue() + "\"");
             }
             for (Field field : SqlDatabaseCreator.getFields(getClazz())) {
                 columns.add(field.getName());
             }
-            String finalExpression = TextUtils.join(",", expressions);
+            String finalExpression = TextUtils.join(" AND ", expressions);
             if (limit > 0) {
                 finalExpression += " LIMIT " + limit;
             }
