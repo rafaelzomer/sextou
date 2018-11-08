@@ -6,10 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GenericAdapter<T> extends RecyclerView.Adapter<GenericAdapter.ViewHolder<T>> {
     final private List<T> dataset;
+    final private Map<Integer, View> viewByPosition = new HashMap<>();
     final private int view;
     final private Configure<T> configure;
 
@@ -22,12 +25,15 @@ public class GenericAdapter<T> extends RecyclerView.Adapter<GenericAdapter.ViewH
     @NonNull
     @Override
     public ViewHolder<T> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder<>(configure.config(), LayoutInflater.from(parent.getContext())
+        Holder<T> holder = configure.config();
+        holder.setViewByPosition(viewByPosition);
+        return new ViewHolder<>(holder, LayoutInflater.from(parent.getContext())
                 .inflate(view, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull GenericAdapter.ViewHolder<T> holder, int position) {
+        viewByPosition.put(position, holder.view);
         holder.set(dataset.get(position));
     }
 
@@ -36,10 +42,18 @@ public class GenericAdapter<T> extends RecyclerView.Adapter<GenericAdapter.ViewH
         return dataset.size();
     }
 
-    public interface Holder<T> {
-        void configure(View view);
+    public static abstract class Holder<T> {
+        private Map<Integer, View> viewByPosition = new HashMap<>();
+        protected abstract void configure(View view);
+        protected abstract void set(T news);
 
-        void set(T news);
+        public View getView(Integer position) {
+            return viewByPosition.get(position);
+        }
+
+        public void setViewByPosition(Map<Integer, View> viewByPosition) {
+            this.viewByPosition = viewByPosition;
+        }
     }
 
     public interface Configure<J> {
@@ -47,12 +61,14 @@ public class GenericAdapter<T> extends RecyclerView.Adapter<GenericAdapter.ViewH
     }
 
     static class ViewHolder<T> extends RecyclerView.ViewHolder {
-        private Holder<T> holder;
+        private final Holder<T> holder;
+        private final View view;
 
         private ViewHolder(Holder<T> holder, View v) {
             super(v);
-            holder.configure(v);
             this.holder = holder;
+            this.view = v;
+            holder.configure(v);
         }
 
         void set(T news) {

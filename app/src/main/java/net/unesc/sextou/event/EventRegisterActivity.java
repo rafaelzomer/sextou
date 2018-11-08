@@ -1,29 +1,46 @@
 package net.unesc.sextou.event;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
 
 import net.unesc.sextou.AppActivity;
 import net.unesc.sextou.R;
 import net.unesc.sextou.activity.DefaultActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class EventRegisterActivity extends DefaultActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
+    private Button mNext;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_register_activity);
+
         getSupportActionBar().setTitle("Novo Evento");
+
+        mNext = findViewById(R.id.btn_next);
+        mNext.setVisibility(View.INVISIBLE);
         recyclerView = findViewById(R.id.events_type);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(EventRegisterActivity.this, 2));
+
+        recyclerView.setOnTouchListener((view, motionEvent) -> {
+            mNext.setVisibility(View.VISIBLE);
+            return false;
+        });
+
         List<EventType> eventList = new ArrayList<>();
 
         eventList.add(new EventType("15 Anos", R.drawable.ic_15th_birthday));
