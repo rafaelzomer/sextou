@@ -8,7 +8,7 @@ public class SqlDatabase extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "banco.db";
 
-    private static final int DATABASE_VERSAO = 1;
+    private static final int DATABASE_VERSAO = 2;
 
     public SqlDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSAO);

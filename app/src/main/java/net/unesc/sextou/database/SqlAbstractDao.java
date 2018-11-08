@@ -8,11 +8,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
 import java.lang.reflect.Field;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public abstract class SqlAbstractDao<T extends SqlTable> {
 
+    final private static SimpleDateFormat DATE_TIME_FORMATTER = new SimpleDateFormat("yyyyMMddHHmmss", new Locale("pt", "BR"));
     final private SqlDatabase sqlDatabase;
     private SQLiteDatabase db;
 
@@ -39,6 +44,12 @@ public abstract class SqlAbstractDao<T extends SqlTable> {
         }
         if (Integer.class.equals(type)) {
             contentValues.put(name, Integer.parseInt(String.valueOf(value)));
+            return;
+        }
+        if (Date.class.equals(type)) {
+            Date valueDate = (Date) value;
+            String valueString = DATE_TIME_FORMATTER.format(valueDate);
+            contentValues.put(name, valueString);
             return;
         }
         throw new ClassCastException("Tipo para inserção não encontrado: " + type);
@@ -74,10 +85,18 @@ public abstract class SqlAbstractDao<T extends SqlTable> {
     }
 
     public List<T> select() {
-        return select(new ArrayList<>());
+        return select(new ArrayList<>(), 0);
     }
 
-    public List<T> select(List<SqlCompare> where) {
+    public T selectOne(List<SqlCompare> where) {
+        return select(where, 1).get(0);
+    }
+
+    public T selectOne() {
+        return selectOne(new ArrayList<>());
+    }
+
+    public List<T> select(List<SqlCompare> where, int limit) {
         List<T> result = new ArrayList<>();
         Cursor cursor = null;
         try {
@@ -91,6 +110,9 @@ public abstract class SqlAbstractDao<T extends SqlTable> {
                 columns.add(field.getName());
             }
             String finalExpression = TextUtils.join(",", expressions);
+            if (limit > 0) {
+                finalExpression += " LIMIT " + limit;
+            }
             String[] arrayColumns = columns.toArray(new String[columns.size()]);
             cursor = db.query(getTableName(), arrayColumns, finalExpression, null, null, null, null);
             while (cursor.moveToNext()) {
@@ -106,11 +128,18 @@ public abstract class SqlAbstractDao<T extends SqlTable> {
                         if (Integer.class.equals(type)) {
                             field.set(entity, cursor.getInt(index));
                         }
+                        if (Date.class.equals(type)) {
+                            String textDate = cursor.getString(index);
+                            if (textDate != null) {
+                                Date valueDate = DATE_TIME_FORMATTER.parse(textDate);
+                                field.set(entity, valueDate);
+                            }
+                        }
                     }
                 }
                 result.add(entity);
             }
-        } catch (IllegalAccessException | InstantiationException e) {
+        } catch (IllegalAccessException | InstantiationException | ParseException e) {
             e.printStackTrace();
         } finally {
             if (cursor != null) {

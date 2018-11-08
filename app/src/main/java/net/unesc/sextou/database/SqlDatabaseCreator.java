@@ -8,6 +8,7 @@ import net.unesc.sextou.login.User;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class SqlDatabaseCreator {
@@ -24,6 +25,9 @@ public class SqlDatabaseCreator {
         }
         if (clazz == Long.class) {
             return "integer";
+        }
+        if (clazz == Date.class) {
+            return "text";
         }
         return null;
     }
@@ -51,7 +55,7 @@ public class SqlDatabaseCreator {
         for (Class<? extends SqlTable> table : TABLES) {
             String tableName = table.getSimpleName();
             backupData(db, table);
-            db.execSQL("drop table if exists "+tableName);
+            db.execSQL("drop table if exists " + tableName);
             List<String> columns = new ArrayList<>();
             for (Field field : getFields(table)) {
                 String columnName = field.getName();

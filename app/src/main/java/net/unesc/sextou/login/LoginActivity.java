@@ -5,36 +5,33 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import net.unesc.sextou.AppActivity;
 import net.unesc.sextou.R;
-import net.unesc.sextou.database.SqlDatabase;
+import net.unesc.sextou.database.SqlCompare;
 import net.unesc.sextou.register.RegisterActivity;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
     private EditText mEmailView;
     private EditText mPasswordView;
+    private UserDao userDao = new UserDao(LoginActivity.this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UserDao userDao = new UserDao(LoginActivity.this);
-        userDao.insert(new User("rafael", "zomer"));
         setContentView(R.layout.login_activity);
         mEmailView = findViewById(R.id.email);
 
         List<User> users = userDao.select();
-        Log.d("zomer=", "="+users);
+        Log.d("zomer=", "=" + users);
 
         mPasswordView = findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener((textView, id, keyEvent) -> {
@@ -47,9 +44,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Button mEmailSignInButton = findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(view -> {
-//                attemptLogin();
-            Intent intent = new Intent(LoginActivity.this, AppActivity.class);
-            startActivity(intent);
+            attemptLogin();
         });
 
         Button mRegisterButton = findViewById(R.id.register_button);
@@ -69,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
         boolean cancel = false;
         View focusView = null;
 
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (!TextUtils.isEmpty(password) && !User.isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -79,24 +74,24 @@ public class LoginActivity extends AppCompatActivity {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-        } else if (!isEmailValid(email)) {
+        } else if (!User.isEmailValid(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
         }
+        User user = userDao.selectOne(
+                Arrays.asList(
+                        SqlCompare.of("email", email),
+                        SqlCompare.of("password", password)
+                )
+        );
 
-        if (cancel) {
+        if (cancel || user == null) {
             focusView.requestFocus();
         } else {
+            Intent intent = new Intent(LoginActivity.this, AppActivity.class);
+            startActivity(intent);
         }
-    }
-
-    private boolean isEmailValid(String email) {
-        return email.contains("@");
-    }
-
-    private boolean isPasswordValid(String password) {
-        return password.length() > 4;
     }
 }
 
