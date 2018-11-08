@@ -1,7 +1,9 @@
 package net.unesc.sextou.login;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.inputmethod.EditorInfo;
@@ -82,6 +84,11 @@ public class LoginActivity extends AppCompatActivity {
         if (user == null) {
             Toast.makeText(getApplicationContext(), R.string.error_incorrect_login, Toast.LENGTH_SHORT).show();
         } else {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+            sharedPreferences.edit()
+                    .putString("name", user.getName())
+                    .putString("email", user.getEmail())
+                    .apply();
             Toast.makeText(getApplicationContext(), R.string.success, Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(LoginActivity.this, AppActivity.class);
             startActivity(intent);

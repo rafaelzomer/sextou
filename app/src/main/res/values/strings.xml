@@ -38,4 +38,7 @@
     <string name="event_addGuest">Invite People</string>
     <string name="event_Invited">Invited</string>
     <string name="event_jump">Jump</string>
+    <string name="events">Events</string>
+    <string name="config">Configurations</string>
+    <string name="exit">Exit</string>
 </resources>
