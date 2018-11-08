@@ -15,14 +15,16 @@
         android:contentDescription="@string/nav_header_desc"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:scaleType="centerCrop"
-        app:srcCompat="@drawable/bg_sidebar" />
+        app:srcCompat="@drawable/bg_title" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:padding="20dp"
-        android:orientation="vertical">
+        android:background="#28000000"
+        android:gravity="bottom|center"
+        android:orientation="vertical"
+        android:padding="20dp">
 
         <TextView
             android:id="@+id/nav_header_title"
@@ -30,14 +32,15 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/nav_header_vertical_spacing"
             android:text="@string/nav_header_title"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
             tools:text="Teste" />
 
         <TextView
             android:id="@+id/nav_header_subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/nav_header_subtitle" />
+            android:text="@string/nav_header_subtitle"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
     </LinearLayout>
 

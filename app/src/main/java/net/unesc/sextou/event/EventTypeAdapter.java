@@ -36,7 +36,9 @@ public class EventTypeAdapter extends GenericAdapter<EventType> {
 
 
                 mCard.setOnClickListener(viewCard -> {
-                    event.getListener().onClick(viewCard);
+                    if (event.getListener() != null) {
+                        event.getListener().onClick(viewCard);
+                    }
                     for(int i = 0; i < dataset.size(); i++){
                         EventType eventType = dataset.get(i);
                         getView(i).findViewById(R.id.check).setVisibility(View.INVISIBLE);
