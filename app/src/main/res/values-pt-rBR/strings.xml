@@ -9,4 +9,13 @@
     <string name="action_register">Registrar</string>
     <string name="action_sign_in">Acessar</string>
     <string name="action_sign_in_short">Acessar</string>
+    <string name="event_description">Descrição</string>
+    <string name="event_name">Nome</string>
+    <string name="event_date">Data</string>
+    <string name="event_prev">Anterior</string>
+    <string name="event_next">Proximo</string>
+    <string name="event_addGuest">Convidar Pessoas</string>
+    <string name="event_Invited">Convidados</string>
+    <string name="event_jump">Pular</string>
+
 </resources>
