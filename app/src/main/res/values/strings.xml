@@ -30,4 +30,7 @@
     <string name="prompt_birthday">Birthday</string>
     <string name="prompt_name">Name</string>
     <string name="action_register">Register</string>
+    <string name="events">Events</string>
+    <string name="config">Configurations</string>
+    <string name="exit">Exit</string>
 </resources>
